@@ -5,12 +5,6 @@ defmodule MassivelyMultiplayerTtt.Game do
 
   def make_move(game, cell_num) when cell_num >= 0 and cell_num <= 8 do
     case Enum.at(game.board, cell_num) do
-      :x ->
-        {:square_filled, game}
-
-      :o ->
-        {:square_filled, game}
-
       :empty ->
         if game.winning_player != :unfinished do
           {:game_already_over, game}
@@ -40,6 +34,9 @@ defmodule MassivelyMultiplayerTtt.Game do
               {:game_finished, game}
           end
         end
+
+      _x_or_o ->
+        {:square_filled, game}
     end
   end
 
