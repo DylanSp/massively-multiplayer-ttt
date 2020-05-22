@@ -3,7 +3,7 @@ defmodule MassivelyMultiplayerTtt.Game do
             winning_player: :unfinished,
             board: List.duplicate(:empty, 9)
 
-  def make_move(game, cell_num) do
+  def make_move(game, cell_num) when cell_num >= 0 and cell_num <= 8 do
     case Enum.at(game.board, cell_num) do
       :x ->
         {:square_filled, game}
