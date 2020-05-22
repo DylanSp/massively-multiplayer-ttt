@@ -11,14 +11,18 @@ defmodule MassivelyMultiplayerTtt.Game do
         else
           game = update_game_state(game, cell_num)
 
-          game = check_for_end(game)
-
-          case game.winning_player do
+          case check_for_end(game.board) do
             :unfinished ->
               {:waiting_for_move, game}
 
-            _ ->
-              {:game_finished, game}
+            :drawn ->
+              {:game_finished, %{game | winning_player: :drawn}}
+
+            :x ->
+              {:game_finished, %{game | winning_player: :player_x}}
+
+            :o ->
+              {:game_finished, %{game | winning_player: :player_o}}
           end
         end
 
@@ -35,62 +39,23 @@ defmodule MassivelyMultiplayerTtt.Game do
     %{game | board: List.replace_at(game.board, cell_num, :o), current_player: :player_x}
   end
 
-  defp check_for_end(game) do
-    case game.board do
-      [:x, :x, :x, _, _, _, _, _, _] ->
-        %{game | winning_player: :player_x}
+  # Horizontals
+  defp check_for_end([a, a, a, _, _, _, _, _, _]) when a == :x or a == :o, do: a
+  defp check_for_end([_, _, _, a, a, a, _, _, _]) when a == :x or a == :o, do: a
+  defp check_for_end([_, _, _, _, _, _, a, a, a]) when a == :x or a == :o, do: a
+  # Verticals
+  defp check_for_end([a, _, _, a, _, _, a, _, _]) when a == :x or a == :o, do: a
+  defp check_for_end([_, a, _, _, a, _, _, a, _]) when a == :x or a == :o, do: a
+  defp check_for_end([_, _, a, _, _, a, _, _, a]) when a == :x or a == :o, do: a
+  # Diagonals
+  defp check_for_end([a, _, _, _, a, _, _, _, a]) when a == :x or a == :o, do: a
+  defp check_for_end([_, _, a, _, a, _, a, _, _]) when a == :x or a == :o, do: a
 
-      [_, _, _, :x, :x, :x, _, _, _] ->
-        %{game | winning_player: :player_x}
-
-      [_, _, _, _, _, _, :x, :x, :x] ->
-        %{game | winning_player: :player_x}
-
-      [:x, _, _, :x, _, _, :x, _, _] ->
-        %{game | winning_player: :player_x}
-
-      [_, :x, _, _, :x, _, _, :x, _] ->
-        %{game | winning_player: :player_x}
-
-      [_, _, :x, _, _, :x, _, _, :x] ->
-        %{game | winning_player: :player_x}
-
-      [:x, _, _, _, :x, _, _, _, :x] ->
-        %{game | winning_player: :player_x}
-
-      [_, _, :x, _, :x, _, :x, _, _] ->
-        %{game | winning_player: :player_x}
-
-      [:o, :o, :o, _, _, _, _, _, _] ->
-        %{game | winning_player: :player_o}
-
-      [_, _, _, :o, :o, :o, _, _, _] ->
-        %{game | winning_player: :player_o}
-
-      [_, _, _, _, _, _, :o, :o, :o] ->
-        %{game | winning_player: :player_o}
-
-      [:o, _, _, :o, _, _, :o, _, _] ->
-        %{game | winning_player: :player_o}
-
-      [_, :o, _, _, :o, _, _, :o, _] ->
-        %{game | winning_player: :player_o}
-
-      [_, _, :o, _, _, :o, _, _, :o] ->
-        %{game | winning_player: :player_o}
-
-      [:o, _, _, _, :o, _, _, _, :o] ->
-        %{game | winning_player: :player_o}
-
-      [_, _, :o, _, :o, _, :o, _, _] ->
-        %{game | winning_player: :player_o}
-
-      board ->
-        if :empty in board do
-          game
-        else
-          %{game | winning_player: :drawn}
-        end
+  defp check_for_end(board) do
+    if :empty in board do
+      :unfinished
+    else
+      :drawn
     end
   end
 end
