@@ -9,20 +9,7 @@ defmodule MassivelyMultiplayerTtt.Game do
         if game.winning_player != :unfinished do
           {:game_already_over, game}
         else
-          game =
-            if game.current_player == :player_x do
-              %{
-                game
-                | board: List.replace_at(game.board, cell_num, :x),
-                  current_player: :player_o
-              }
-            else
-              %{
-                game
-                | board: List.replace_at(game.board, cell_num, :o),
-                  current_player: :player_x
-              }
-            end
+          game = update_game_state(game, cell_num)
 
           game = check_for_end(game)
 
@@ -38,6 +25,14 @@ defmodule MassivelyMultiplayerTtt.Game do
       _x_or_o ->
         {:square_filled, game}
     end
+  end
+
+  defp update_game_state(%{current_player: :player_x} = game, cell_num) do
+    %{game | board: List.replace_at(game.board, cell_num, :x), current_player: :player_o}
+  end
+
+  defp update_game_state(%{current_player: :player_o} = game, cell_num) do
+    %{game | board: List.replace_at(game.board, cell_num, :o), current_player: :player_x}
   end
 
   defp check_for_end(game) do
