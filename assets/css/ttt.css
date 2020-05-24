@@ -1,0 +1,15 @@
+.game-grid {
+  display: grid;
+  gap: 5px;
+  grid-template-columns: repeat(3, 160px); /* 150 + 2*5 */
+  grid-template-rows: repeat(3, 160px); /* 150 + 2*5 */
+  background-color: black;
+  height: 480px; /*3 * (150 + 2*5) */
+  width: 480px; /*3 * (150 + 2*5) */
+}
+
+.game-cell {
+  height: 150px;
+  width: 150px;
+  background-color: white;
+}
