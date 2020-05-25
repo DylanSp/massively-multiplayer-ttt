@@ -14,7 +14,7 @@ defmodule MassivelyMultiplayerTttWeb.GameLive do
 
   def handle_event("new_game", _, socket) do
     socket = reset_game(socket)
-    Phoenix.PubSub.broadcast(MassivelyMultiplayerTTT.PubSub, @topic, :new_game)
+    Phoenix.PubSub.broadcast(MassivelyMultiplayerTtt.PubSub, @topic, :new_game)
     {:noreply, socket}
   end
 
