@@ -2,12 +2,20 @@ defmodule MassivelyMultiplayerTttWeb.GameLive do
   use MassivelyMultiplayerTttWeb, :live_view
   import MassivelyMultiplayerTtt.Game
 
+  @topic "game"
+
   def mount(_params, _session, socket) do
+    if connected?(socket) do
+      Phoenix.PubSub.subscribe(MassivelyMultiplayerTtt.PubSub, @topic)
+    end
+
     {:ok, reset_game(socket)}
   end
 
   def handle_event("new_game", _, socket) do
-    {:noreply, reset_game(socket)}
+    socket = reset_game(socket)
+    Phoenix.PubSub.broadcast(MassivelyMultiplayerTTT.PubSub, @topic, :new_game)
+    {:noreply, socket}
   end
 
   def handle_event("click_cell", %{"cell-num" => cell_num}, socket) do
@@ -30,6 +38,17 @@ defmodule MassivelyMultiplayerTttWeb.GameLive do
           assign(socket, game: new_game, status_message: get_status_message(new_game))
       end
 
+    Phoenix.PubSub.broadcast(MassivelyMultiplayerTtt.PubSub, @topic, {:game_updated, new_game})
+
+    {:noreply, socket}
+  end
+
+  def handle_info(:new_game, socket) do
+    {:noreply, reset_game(socket)}
+  end
+
+  def handle_info({:game_updated, game}, socket) do
+    socket = assign(socket, game: game, status_message: get_status_message(game))
     {:noreply, socket}
   end
 
