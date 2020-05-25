@@ -1,13 +1,15 @@
 <div class="visible-elements-container">
   <div>
-    <%= @status_message %>
+    <h2>
+      <%= @status_message %>
+    </h2>
   </div>
 
   <div class="game-grid">
     <%= for cell_num <- 0..8 do %>
       <div class="game-cell" phx-click="click_cell" phx-value-cell-num="<%= cell_num %>">
         <%= case Enum.at(@game.board, cell_num) do %>
-          <% :empty -> %>E
+          <% :empty -> %>
           <% :x -> %>X
           <% :o -> %>O
         <% end %>
