@@ -3,9 +3,11 @@ defmodule MassivelyMultiplayerTttWeb.GameLive do
   import MassivelyMultiplayerTtt.Game
 
   def mount(_params, _session, socket) do
-    game = %MassivelyMultiplayerTtt.Game{}
-    socket = assign(socket, game: game, status_message: get_status_message(game))
-    {:ok, socket}
+    {:ok, reset_game(socket)}
+  end
+
+  def handle_event("new_game", _, socket) do
+    {:noreply, reset_game(socket)}
   end
 
   def handle_event("click_cell", %{"cell-num" => cell_num}, socket) do
@@ -29,6 +31,11 @@ defmodule MassivelyMultiplayerTttWeb.GameLive do
       end
 
     {:noreply, socket}
+  end
+
+  defp reset_game(socket) do
+    game = %MassivelyMultiplayerTtt.Game{}
+    assign(socket, game: game, status_message: get_status_message(game))
   end
 
   defp get_status_message(game) do

@@ -1,8 +1,8 @@
 <div class="visible-elements-container">
-  <div>
-    <h2>
+  <div class="status-message-container">
+    <h1>
       <%= @status_message %>
-    </h2>
+    </h1>
   </div>
 
   <div class="game-grid">
@@ -15,5 +15,11 @@
         <% end %>
       </div>
     <% end %>
+  </div>
+
+  <div class="new-game-button-container">
+    <button class="new-game-button" phx-click="new_game">
+      Start New Game
+    </button>
   </div>
 </div>

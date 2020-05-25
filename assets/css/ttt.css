@@ -1,10 +1,19 @@
 .visible-elements-container {
+  height: 95vh;
   display: flex;
   flex-flow: column;
   align-items: center;
 }
 
+.status-message-container {
+  flex: 1 1 auto;
+  display: flex;
+  flex-flow: column;
+  justify-content: center;
+}
+
 .game-grid {
+  flex: 0 2 auto;
   display: grid;
   gap: 5px;
   grid-template-columns: repeat(3, 160px); /* 150 + 2*5 */
@@ -22,4 +31,15 @@
   justify-content: center;
   align-items: center;
   font-size: 100px;
+}
+
+.new-game-button-container {
+  flex: 2 2 auto;
+  display: flex;
+  flex-flow: column;
+  justify-content: center;
+}
+
+.new-game-button {
+  font-size: 200%;
 }
