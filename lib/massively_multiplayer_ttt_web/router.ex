@@ -17,8 +17,7 @@ defmodule MassivelyMultiplayerTttWeb.Router do
   scope "/", MassivelyMultiplayerTttWeb do
     pipe_through :browser
 
-    live "/", PageLive, :index
-    live "/game", GameLive
+    live "/", GameLive
   end
 
   # Other scopes may use custom stacks.
