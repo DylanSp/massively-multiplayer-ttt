@@ -1,25 +1,35 @@
 <div class="visible-elements-container">
+  <div class="username-manager-container">
+    Username Manager
+  </div>
+
   <div class="status-message-container">
     <h1>
       <%= @status_message %>
     </h1>
   </div>
 
-  <div class="game-grid">
-    <%= for cell_num <- 0..8 do %>
-      <div class="game-cell" phx-click="click_cell" phx-value-cell-num="<%= cell_num %>">
-        <%= case Enum.at(@game.board, cell_num) do %>
-          <% :empty -> %>
-          <% :x -> %>X
-          <% :o -> %>O
-        <% end %>
-      </div>
-    <% end %>
+  <div class="game-grid-wrapper">
+    <div class="game-grid">
+      <%= for cell_num <- 0..8 do %>
+        <div class="game-cell" phx-click="click_cell" phx-value-cell-num="<%= cell_num %>">
+          <%= case Enum.at(@game.board, cell_num) do %>
+            <% :empty -> %>
+            <% :x -> %>X
+            <% :o -> %>O
+          <% end %>
+        </div>
+      <% end %>
+    </div>
   </div>
 
   <div class="new-game-button-container">
     <button class="new-game-button" phx-click="new_game">
       Start New Game
     </button>
+  </div>
+
+  <div class="user-list-container">
+    User List
   </div>
 </div>

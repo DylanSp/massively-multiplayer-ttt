@@ -1,19 +1,29 @@
 .visible-elements-container {
   height: 95vh;
-  display: flex;
-  flex-flow: column;
-  align-items: center;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+}
+
+.username-manager-container {
+  grid-row: 1 / 4;
+  grid-column: 1 / 2;
 }
 
 .status-message-container {
-  flex: 1 1 auto;
   display: flex;
   flex-flow: column;
   justify-content: center;
+  align-items: center;
+}
+
+.game-grid-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .game-grid {
-  flex: 0 2 auto;
   display: grid;
   gap: 5px;
   grid-template-columns: repeat(3, 160px); /* 150 + 2*5 */
@@ -34,12 +44,17 @@
 }
 
 .new-game-button-container {
-  flex: 2 2 auto;
   display: flex;
   flex-flow: column;
   justify-content: center;
+  align-items: center;
 }
 
 .new-game-button {
   font-size: 200%;
+}
+
+.user-list-container {
+  grid-row: 1 / 4;
+  grid-column: 3 / 4;
 }
