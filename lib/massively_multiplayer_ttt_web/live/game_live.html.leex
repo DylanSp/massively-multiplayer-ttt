@@ -1,12 +1,17 @@
 <div class="visible-elements-container">
   <div class="username-manager-container">
     <h1>
-      Hello, GenericUser1!
+      Hello, <%= @username %>!
     </h1>
 
-    <label for="username_chooser">Change username:</label>
-    <input type="text" id="username_chooser" name="username_chooser" class="username-chooser">
-    <button>Submit</button>
+    <%= f = form_for :username, "#", [phx_submit: :change_username] %>
+      <%= label f, :value, "Change username:" %>
+      <%= text_input f, :value %>
+
+      <div class="username-chooser-btn">
+        <%= submit "Submit" %>
+      </div>
+    </form>
   </div>
 
   <div class="status-message-container">

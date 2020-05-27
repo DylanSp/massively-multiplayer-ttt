@@ -1,5 +1,6 @@
 defmodule MassivelyMultiplayerTttWeb.GameLive do
   use MassivelyMultiplayerTttWeb, :live_view
+  use Phoenix.HTML
   import MassivelyMultiplayerTtt.Game
 
   @topic "game"
@@ -9,7 +10,14 @@ defmodule MassivelyMultiplayerTttWeb.GameLive do
       Phoenix.PubSub.subscribe(MassivelyMultiplayerTtt.PubSub, @topic)
     end
 
+    # TODO - function for generating random usernames
+    socket = assign(socket, username: "GenericUser1")
     {:ok, reset_game(socket)}
+  end
+
+  def handle_event("change_username", form_data, socket) do
+    socket = assign(socket, username: form_data["username"]["value"])
+    {:noreply, socket}
   end
 
   def handle_event("new_game", _, socket) do

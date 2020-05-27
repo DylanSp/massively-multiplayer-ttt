@@ -14,8 +14,18 @@
   align-items: center;
 }
 
-.username-chooser {
-  margin: 0.5rem 0;
+label,
+.username-chooser-btn {
+  text-align: center;
+}
+
+input[type="text"] {
+  margin: 0.5rem auto;
+}
+
+label,
+input[type="text"] {
+  display: block;
 }
 
 .status-message-container {
