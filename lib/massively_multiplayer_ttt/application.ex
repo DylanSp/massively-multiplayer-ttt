@@ -12,9 +12,10 @@ defmodule MassivelyMultiplayerTtt.Application do
       # Start the PubSub system
       {Phoenix.PubSub, name: MassivelyMultiplayerTtt.PubSub},
       # Start the Endpoint (http/https)
-      MassivelyMultiplayerTttWeb.Endpoint
+      MassivelyMultiplayerTttWeb.Endpoint,
       # Start a worker by calling: MassivelyMultiplayerTtt.Worker.start_link(arg)
       # {MassivelyMultiplayerTtt.Worker, arg}
+      GameLiveMonitor
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

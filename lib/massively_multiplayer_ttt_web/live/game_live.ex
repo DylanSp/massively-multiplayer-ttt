@@ -7,6 +7,7 @@ defmodule MassivelyMultiplayerTttWeb.GameLive do
 
   def mount(_params, _session, socket) do
     if connected?(socket) do
+      GameLiveMonitor.monitor(socket.id, self())
       Phoenix.PubSub.subscribe(MassivelyMultiplayerTtt.PubSub, @topic)
     end
 
