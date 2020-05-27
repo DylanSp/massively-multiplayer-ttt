@@ -2,13 +2,12 @@ defmodule MassivelyMultiplayerTttWeb.GameLive do
   use MassivelyMultiplayerTttWeb, :live_view
   use Phoenix.HTML
   import MassivelyMultiplayerTtt.Game
-
-  @topic "game"
+  import MassivelyMultiplayerTtt.Messaging
 
   def mount(_params, _session, socket) do
     if connected?(socket) do
       GameLiveMonitor.monitor(socket.id, self())
-      Phoenix.PubSub.subscribe(MassivelyMultiplayerTtt.PubSub, @topic)
+      subscribe_to_game()
     end
 
     # TODO - function for generating random usernames
@@ -23,7 +22,7 @@ defmodule MassivelyMultiplayerTttWeb.GameLive do
 
   def handle_event("new_game", _, socket) do
     socket = reset_game(socket)
-    Phoenix.PubSub.broadcast(MassivelyMultiplayerTtt.PubSub, @topic, :new_game)
+    broadcast_new_game()
     {:noreply, socket}
   end
 
@@ -47,7 +46,7 @@ defmodule MassivelyMultiplayerTttWeb.GameLive do
           assign(socket, game: new_game, status_message: get_status_message(new_game))
       end
 
-    Phoenix.PubSub.broadcast(MassivelyMultiplayerTtt.PubSub, @topic, {:game_updated, new_game})
+    broadcast_game_update(new_game)
 
     {:noreply, socket}
   end
