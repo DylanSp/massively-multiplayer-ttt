@@ -8,6 +8,14 @@
 .username-manager-container {
   grid-row: 1 / 4;
   grid-column: 1 / 2;
+  display: flex;
+  flex-flow: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.username-chooser {
+  margin: 0.5rem 0;
 }
 
 .status-message-container {
