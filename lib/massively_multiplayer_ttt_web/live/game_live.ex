@@ -2,22 +2,31 @@ defmodule MassivelyMultiplayerTttWeb.GameLive do
   use MassivelyMultiplayerTttWeb, :live_view
   use Phoenix.HTML
   import MassivelyMultiplayerTtt.Game
+  import MassivelyMultiplayerTtt.GameLiveMonitor
   import MassivelyMultiplayerTtt.Messaging
+  import MassivelyMultiplayerTtt.Usernames
 
   def mount(_params, _session, socket) do
+    socket = assign(socket, username: "Connecting...", all_names: [])
+
     if connected?(socket) do
-      GameLiveMonitor.monitor(socket.id, self())
+      monitor(socket.id, self())
       subscribe_to_game()
       subscribe_to_names()
+      username = get_new_username()
+      socket = assign(socket, username: username)
+      # TODO fix game resetting when new connection made; move to separate game server?
+      {:ok, reset_game(socket)}
+    else
+      {:ok, reset_game(socket)}
     end
-
-    socket = assign(socket, username: "Connecting...")
-    # TODO fix game resetting when new connection made; move to separate game server?
-    {:ok, reset_game(socket)}
   end
 
   def handle_event("change_username", form_data, socket) do
-    socket = assign(socket, username: form_data["username"]["value"])
+    old_name = socket.assigns.username
+    new_name = form_data["username"]["value"]
+    _ = change_username(old_name, new_name)
+    socket = assign(socket, username: new_name)
     {:noreply, socket}
   end
 
@@ -58,6 +67,30 @@ defmodule MassivelyMultiplayerTttWeb.GameLive do
 
   def handle_info({:game_updated, game}, socket) do
     socket = assign(socket, game: game, status_message: get_status_message(game))
+    {:noreply, socket}
+  end
+
+  def handle_info({:new_name, name}, socket) do
+    IO.puts("Name added: #{name}")
+    socket = assign(socket, all_names: [name | socket.assigns.all_names])
+    {:noreply, socket}
+  end
+
+  def handle_info({:name_changed, old_name, new_name}, socket) do
+    IO.puts("Old name: #{old_name}")
+    IO.puts("New name: #{new_name}")
+    # TODO implement
+    position = Enum.find_index(socket.assigns.all_names, fn name -> name == old_name end)
+
+    socket =
+      assign(socket, all_names: List.replace_at(socket.assigns.all_names, position, new_name))
+
+    {:noreply, socket}
+  end
+
+  def handle_info({:name_removed, name}, socket) do
+    IO.puts("Name removed: #{name}")
+    socket = assign(socket, all_names: List.delete(socket.assigns.all_names, name))
     {:noreply, socket}
   end
 

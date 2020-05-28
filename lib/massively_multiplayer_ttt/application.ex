@@ -15,7 +15,8 @@ defmodule MassivelyMultiplayerTtt.Application do
       MassivelyMultiplayerTttWeb.Endpoint,
       # Start a worker by calling: MassivelyMultiplayerTtt.Worker.start_link(arg)
       # {MassivelyMultiplayerTtt.Worker, arg}
-      GameLiveMonitor
+      MassivelyMultiplayerTtt.GameLiveMonitor,
+      MassivelyMultiplayerTtt.Usernames
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

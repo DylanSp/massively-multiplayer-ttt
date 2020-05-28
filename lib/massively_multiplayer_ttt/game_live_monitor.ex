@@ -1,6 +1,6 @@
 # Borrowed from https://github.com/phoenixframework/phoenix_live_view/issues/123
 
-defmodule GameLiveMonitor do
+defmodule MassivelyMultiplayerTtt.GameLiveMonitor do
   use GenServer
 
   def start_link(init_arg) do
