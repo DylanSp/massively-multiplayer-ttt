@@ -8,10 +8,11 @@ defmodule MassivelyMultiplayerTttWeb.GameLive do
     if connected?(socket) do
       GameLiveMonitor.monitor(socket.id, self())
       subscribe_to_game()
+      subscribe_to_names()
     end
 
-    # TODO - function for generating random usernames
-    socket = assign(socket, username: "GenericUser1")
+    socket = assign(socket, username: "Connecting...")
+    # TODO fix game resetting when new connection made; move to separate game server?
     {:ok, reset_game(socket)}
   end
 
