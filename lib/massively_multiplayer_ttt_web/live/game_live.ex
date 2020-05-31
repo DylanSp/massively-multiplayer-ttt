@@ -25,9 +25,17 @@ defmodule MassivelyMultiplayerTttWeb.GameLive do
   def handle_event("change_username", form_data, socket) do
     old_name = socket.assigns.username
     new_name = form_data["username"]["value"]
-    _ = change_username(old_name, new_name)
-    socket = assign(socket, username: new_name)
-    {:noreply, socket}
+
+    case new_name do
+      "" ->
+        # TODO Flash error message
+        {:noreply, socket}
+
+      _ ->
+        _ = change_username(old_name, new_name)
+        socket = assign(socket, username: new_name)
+        {:noreply, socket}
+    end
   end
 
   def handle_event("new_game", _, socket) do
