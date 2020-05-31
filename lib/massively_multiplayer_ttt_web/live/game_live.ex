@@ -4,7 +4,7 @@ defmodule MassivelyMultiplayerTttWeb.GameLive do
   import MassivelyMultiplayerTtt.Game
   import MassivelyMultiplayerTtt.GameLiveMonitor
   import MassivelyMultiplayerTtt.Messaging
-  import MassivelyMultiplayerTtt.Usernames
+  import MassivelyMultiplayerTtt.UsernameServer
 
   def mount(_params, _session, socket) do
     socket = assign(socket, username: "Connecting...", all_names: [])

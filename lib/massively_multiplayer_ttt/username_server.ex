@@ -1,4 +1,4 @@
-defmodule MassivelyMultiplayerTtt.Usernames do
+defmodule MassivelyMultiplayerTtt.UsernameServer do
   use GenServer
   import MassivelyMultiplayerTtt.Messaging
 
