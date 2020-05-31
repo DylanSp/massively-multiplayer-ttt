@@ -6,7 +6,7 @@
 
     <%= f = form_for :username, "#", [phx_submit: :change_username] %>
       <%= label f, :value, "Change username:" %>
-      <%= text_input f, :value %>
+      <%= text_input f, :value, required: true %>
 
       <div class="username-chooser-btn">
         <%= submit "Submit" %>
