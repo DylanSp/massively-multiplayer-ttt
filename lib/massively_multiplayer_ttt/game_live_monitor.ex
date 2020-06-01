@@ -47,6 +47,7 @@ defmodule MassivelyMultiplayerTtt.GameLiveMonitor do
     {:noreply, new_state}
   end
 
+  # Ignore message, all taken care of in the handler for :DOWN
   def handle_info({:name_removed, _name, _view_pid}, state) do
     {:noreply, state}
   end
