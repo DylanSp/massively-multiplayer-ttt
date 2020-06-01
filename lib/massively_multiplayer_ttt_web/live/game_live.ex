@@ -88,6 +88,7 @@ defmodule MassivelyMultiplayerTttWeb.GameLive do
   end
 
   def handle_info({:game_updated, game}, socket) do
+    # TODO Flash message if game has ended
     socket = assign(socket, game: game, status_message: get_status_message(game))
     {:noreply, socket}
   end
