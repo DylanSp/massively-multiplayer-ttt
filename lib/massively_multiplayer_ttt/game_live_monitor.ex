@@ -3,12 +3,14 @@
 defmodule MassivelyMultiplayerTtt.GameLiveMonitor do
   use GenServer
 
-  def start_link(init_arg) do
-    GenServer.start_link(__MODULE__, init_arg, name: {:global, __MODULE__})
+  @process_name :game_live_monitor
+
+  def start_link(_opts) do
+    GenServer.start_link(__MODULE__, :ok, name: :game_live_monitor)
   end
 
   def monitor(socket_id, game_pid) do
-    pid = GenServer.whereis({:global, __MODULE__})
+    pid = GenServer.whereis(@process_name)
     GenServer.call(pid, {:monitor, {socket_id, game_pid}})
   end
 

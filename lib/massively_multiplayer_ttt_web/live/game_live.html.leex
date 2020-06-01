@@ -42,8 +42,12 @@
 
   <div class="user-list-container">
     User List:
-    <%= for name <- @all_names do %>
-      <%= name %>
-    <% end %>
+    <ul>
+      <%= for name <- @all_names do %>
+        <li>
+          <%= name %>
+        </li>
+      <% end %>
+    </ul>
   </div>
 </div>

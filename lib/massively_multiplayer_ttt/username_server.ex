@@ -15,6 +15,11 @@ defmodule MassivelyMultiplayerTtt.UsernameServer do
     GenServer.call(pid, :get_new_username)
   end
 
+  def get_all_usernames() do
+    pid = GenServer.whereis(@process_name)
+    GenServer.call(pid, :get_all_usernames)
+  end
+
   def change_username(old_name, new_name) do
     pid = GenServer.whereis(@process_name)
     GenServer.call(pid, {:change_username, old_name, new_name})
@@ -37,6 +42,11 @@ defmodule MassivelyMultiplayerTtt.UsernameServer do
     new_name = get_random_username(names)
     broadcast_name_added(new_name)
     {:reply, new_name, [new_name | names]}
+  end
+
+  @impl true
+  def handle_call(:get_all_usernames, _from, names) do
+    {:reply, names, names}
   end
 
   @impl true

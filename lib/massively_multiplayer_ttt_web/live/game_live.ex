@@ -21,9 +21,15 @@ defmodule MassivelyMultiplayerTttWeb.GameLive do
       subscribe_to_names()
       username = get_new_username()
       game = get_game_status()
+      all_names = get_all_usernames()
 
       socket =
-        assign(socket, game: game, username: username, status_message: get_status_message(game))
+        assign(socket,
+          game: game,
+          username: username,
+          all_names: all_names,
+          status_message: get_status_message(game)
+        )
 
       {:ok, socket}
     else
@@ -95,16 +101,21 @@ defmodule MassivelyMultiplayerTttWeb.GameLive do
 
   ## Name-related internal messaging callbacks
 
-  def handle_info({:new_name, name}, socket) do
-    IO.puts("Name added: #{name}")
-    socket = assign(socket, all_names: [name | socket.assigns.all_names])
-    {:noreply, socket}
+  def handle_info({:new_name, new_name}, socket) do
+    IO.puts("Name added: #{new_name}")
+
+    # Prevent double-add if we're the one who originally fired the new_name event
+    if new_name == socket.assigns.username do
+      {:noreply, socket}
+    else
+      socket = assign(socket, all_names: [new_name | socket.assigns.all_names])
+      {:noreply, socket}
+    end
   end
 
   def handle_info({:name_changed, old_name, new_name}, socket) do
     IO.puts("Old name: #{old_name}")
     IO.puts("New name: #{new_name}")
-    # TODO implement
     position = Enum.find_index(socket.assigns.all_names, fn name -> name == old_name end)
 
     socket =
