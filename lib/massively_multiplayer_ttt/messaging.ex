@@ -3,11 +3,11 @@ defmodule MassivelyMultiplayerTtt.Messaging do
   @game_topic "game"
   @names_topic "names"
 
-  def subscribe_to_game do
+  def subscribe_to_game() do
     Phoenix.PubSub.subscribe(@pubsub, @game_topic)
   end
 
-  def subscribe_to_names do
+  def subscribe_to_names() do
     Phoenix.PubSub.subscribe(@pubsub, @names_topic)
   end
 
