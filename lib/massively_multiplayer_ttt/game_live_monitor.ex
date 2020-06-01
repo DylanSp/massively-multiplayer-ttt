@@ -1,4 +1,5 @@
 # Borrowed from https://github.com/phoenixframework/phoenix_live_view/issues/123
+# state.username is a map associating view PIDs with usernames; when view PID goes down, remove associated username, and notify everyone
 
 defmodule MassivelyMultiplayerTtt.GameLiveMonitor do
   use GenServer
