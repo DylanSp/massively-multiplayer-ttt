@@ -34,13 +34,14 @@ defmodule MassivelyMultiplayerTtt.UsernameServer do
 
   @impl true
   def init(:ok) do
+    subscribe_to_names()
     {:ok, []}
   end
 
   @impl true
-  def handle_call(:get_new_username, _from, names) do
+  def handle_call(:get_new_username, {view_pid, _ref}, names) do
     new_name = get_random_username(names)
-    broadcast_name_added(new_name)
+    broadcast_name_added(new_name, view_pid)
     {:reply, new_name, [new_name | names]}
   end
 
@@ -50,26 +51,35 @@ defmodule MassivelyMultiplayerTtt.UsernameServer do
   end
 
   @impl true
-  def handle_call({:change_username, old_name, new_name}, _from, names) do
+  def handle_call({:change_username, old_name, new_name}, {view_pid, _ref}, names) do
     cond do
       new_name in names ->
         {:reply, :name_taken, names}
 
       old_name in names ->
         position = Enum.find_index(names, fn name -> name == old_name end)
-        broadcast_name_changed(old_name, new_name)
+        broadcast_name_changed(old_name, new_name, view_pid)
         {:reply, :name_successfully_changed, List.replace_at(names, position, new_name)}
 
       true ->
-        broadcast_name_added(new_name)
+        broadcast_name_added(new_name, view_pid)
         {:reply, :new_name_added, [new_name | names]}
     end
   end
 
   @impl true
-  def handle_call({:remove_username, removed_name}, _from, names) do
-    broadcast_name_removed(removed_name)
+  def handle_call({:remove_username, removed_name}, {view_pid, _ref}, names) do
+    broadcast_name_removed(removed_name, view_pid)
     {:noreply, Enum.reject(names, fn name -> name == removed_name end)}
+  end
+
+  @impl true
+  def handle_info({:name_removed, removed_name, _view_pid}, names) do
+    {:noreply, Enum.reject(names, fn name -> name == removed_name end)}
+  end
+
+  def handle_info(_, names) do
+    {:noreply, names}
   end
 
   defp get_random_username(existing_usernames) do

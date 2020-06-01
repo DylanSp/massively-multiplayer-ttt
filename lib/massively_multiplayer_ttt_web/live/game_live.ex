@@ -101,9 +101,7 @@ defmodule MassivelyMultiplayerTttWeb.GameLive do
 
   ## Name-related internal messaging callbacks
 
-  def handle_info({:new_name, new_name}, socket) do
-    IO.puts("Name added: #{new_name}")
-
+  def handle_info({:new_name, new_name, _view_pid}, socket) do
     # Prevent double-add if we're the one who originally fired the new_name event
     if new_name == socket.assigns.username do
       {:noreply, socket}
@@ -113,9 +111,7 @@ defmodule MassivelyMultiplayerTttWeb.GameLive do
     end
   end
 
-  def handle_info({:name_changed, old_name, new_name}, socket) do
-    IO.puts("Old name: #{old_name}")
-    IO.puts("New name: #{new_name}")
+  def handle_info({:name_changed, old_name, new_name, _view_pid}, socket) do
     position = Enum.find_index(socket.assigns.all_names, fn name -> name == old_name end)
 
     socket =
@@ -124,8 +120,7 @@ defmodule MassivelyMultiplayerTttWeb.GameLive do
     {:noreply, socket}
   end
 
-  def handle_info({:name_removed, name}, socket) do
-    IO.puts("Name removed: #{name}")
+  def handle_info({:name_removed, name, _view_pid}, socket) do
     socket = assign(socket, all_names: List.delete(socket.assigns.all_names, name))
     {:noreply, socket}
   end
