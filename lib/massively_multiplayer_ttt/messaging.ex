@@ -19,15 +19,15 @@ defmodule MassivelyMultiplayerTtt.Messaging do
     Phoenix.PubSub.broadcast(@pubsub, @game_topic, {:game_updated, game})
   end
 
-  def broadcast_name_added(name, view_pid) do
-    Phoenix.PubSub.broadcast(@pubsub, @names_topic, {:new_name, name, view_pid})
+  def broadcast_name_added(name) do
+    Phoenix.PubSub.broadcast(@pubsub, @names_topic, {:new_name, name})
   end
 
-  def broadcast_name_changed(old_name, new_name, view_pid) do
-    Phoenix.PubSub.broadcast(@pubsub, @names_topic, {:name_changed, old_name, new_name, view_pid})
+  def broadcast_name_changed(old_name, new_name) do
+    Phoenix.PubSub.broadcast(@pubsub, @names_topic, {:name_changed, old_name, new_name})
   end
 
-  def broadcast_name_removed(name, view_pid) do
-    Phoenix.PubSub.broadcast(@pubsub, @names_topic, {:name_removed, name, view_pid})
+  def broadcast_name_removed(name) do
+    Phoenix.PubSub.broadcast(@pubsub, @names_topic, {:name_removed, name})
   end
 end

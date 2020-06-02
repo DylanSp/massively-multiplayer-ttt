@@ -1,7 +1,6 @@
 defmodule MassivelyMultiplayerTttWeb.GameLive do
   use MassivelyMultiplayerTttWeb, :live_view
   use Phoenix.HTML
-  import MassivelyMultiplayerTtt.GameLiveMonitor
   import MassivelyMultiplayerTtt.GameServer
   import MassivelyMultiplayerTtt.Messaging
   import MassivelyMultiplayerTtt.UsernameServer
@@ -16,7 +15,7 @@ defmodule MassivelyMultiplayerTttWeb.GameLive do
       )
 
     if connected?(socket) do
-      monitor(socket.id, self())
+      monitor()
       subscribe_to_game()
       subscribe_to_names()
       username = get_new_username()
@@ -101,7 +100,7 @@ defmodule MassivelyMultiplayerTttWeb.GameLive do
 
   ## Name-related internal messaging callbacks
 
-  def handle_info({:new_name, new_name, _view_pid}, socket) do
+  def handle_info({:new_name, new_name}, socket) do
     # Prevent double-add if we're the one who originally fired the new_name event
     if new_name == socket.assigns.username do
       {:noreply, socket}
@@ -111,7 +110,7 @@ defmodule MassivelyMultiplayerTttWeb.GameLive do
     end
   end
 
-  def handle_info({:name_changed, old_name, new_name, _view_pid}, socket) do
+  def handle_info({:name_changed, old_name, new_name}, socket) do
     position = Enum.find_index(socket.assigns.all_names, fn name -> name == old_name end)
 
     socket =
@@ -120,7 +119,7 @@ defmodule MassivelyMultiplayerTttWeb.GameLive do
     {:noreply, socket}
   end
 
-  def handle_info({:name_removed, name, _view_pid}, socket) do
+  def handle_info({:name_removed, name}, socket) do
     socket = assign(socket, all_names: List.delete(socket.assigns.all_names, name))
     {:noreply, socket}
   end

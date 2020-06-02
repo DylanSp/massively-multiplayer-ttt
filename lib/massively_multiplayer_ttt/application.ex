@@ -15,7 +15,7 @@ defmodule MassivelyMultiplayerTtt.Application do
       MassivelyMultiplayerTttWeb.Endpoint,
       # Start a worker by calling: MassivelyMultiplayerTtt.Worker.start_link(arg)
       # {MassivelyMultiplayerTtt.Worker, arg}
-      MassivelyMultiplayerTtt.GameLiveMonitor,
+
       MassivelyMultiplayerTtt.GameServer,
       MassivelyMultiplayerTtt.UsernameServer
     ]

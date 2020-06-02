@@ -8,6 +8,10 @@ defmodule MassivelyMultiplayerTtt.UsernameServer do
     GenServer.start_link(__MODULE__, :ok, name: __MODULE__)
   end
 
+  def monitor() do
+    GenServer.call(__MODULE__, :monitor)
+  end
+
   def get_new_username() do
     GenServer.call(__MODULE__, :get_new_username)
   end
@@ -20,60 +24,69 @@ defmodule MassivelyMultiplayerTtt.UsernameServer do
     GenServer.call(__MODULE__, {:change_username, old_name, new_name})
   end
 
-  def remove_username(removed_name) do
-    GenServer.call(__MODULE__, {:remove_username, removed_name})
-  end
-
   ## Server callbacks
 
   @impl true
-  def init(:ok) do
-    subscribe_to_names()
-    {:ok, []}
+  def init(_) do
+    {:ok, %{}}
   end
 
   @impl true
-  def handle_call(:get_new_username, {view_pid, _ref}, names) do
-    new_name = get_random_username(names)
-    broadcast_name_added(new_name, view_pid)
-    {:reply, new_name, [new_name | names]}
+  def handle_call(:monitor, {view_pid, _ref}, state) do
+    _ = Process.monitor(view_pid)
+    {:reply, :ok, state}
   end
 
   @impl true
-  def handle_call(:get_all_usernames, _from, names) do
-    {:reply, names, names}
+  def handle_call(:get_new_username, {view_pid, _ref}, state) do
+    new_name =
+      state
+      |> all_usernames
+      |> get_random_username
+
+    broadcast_name_added(new_name)
+
+    new_state = Map.put(state, view_pid, new_name)
+    {:reply, new_name, new_state}
   end
 
   @impl true
-  def handle_call({:change_username, old_name, new_name}, {view_pid, _ref}, names) do
+  def handle_call(:get_all_usernames, _from, state) do
+    {:reply, all_usernames(state), state}
+  end
+
+  @impl true
+  def handle_call({:change_username, old_name, new_name}, {view_pid, _ref}, state) do
+    names = all_usernames(state)
+
     cond do
       new_name in names ->
         {:reply, :name_taken, names}
 
       old_name in names ->
-        position = Enum.find_index(names, fn name -> name == old_name end)
-        broadcast_name_changed(old_name, new_name, view_pid)
-        {:reply, :name_successfully_changed, List.replace_at(names, position, new_name)}
+        broadcast_name_changed(old_name, new_name)
+        new_state = Map.put(state, view_pid, new_name)
+        {:reply, :name_successfully_changed, new_state}
 
       true ->
-        broadcast_name_added(new_name, view_pid)
-        {:reply, :new_name_added, [new_name | names]}
+        broadcast_name_added(new_name)
+        new_state = Map.put(state, view_pid, new_name)
+        {:reply, new_name, new_state}
     end
   end
 
   @impl true
-  def handle_call({:remove_username, removed_name}, {view_pid, _ref}, names) do
-    broadcast_name_removed(removed_name, view_pid)
-    {:noreply, Enum.reject(names, fn name -> name == removed_name end)}
+  def handle_info({:DOWN, _ref, :process, view_pid, _reason}, state) do
+    {removed_name, new_state} = Map.pop(state, view_pid)
+
+    broadcast_name_removed(removed_name)
+
+    {:noreply, new_state}
   end
 
-  @impl true
-  def handle_info({:name_removed, removed_name, _view_pid}, names) do
-    {:noreply, Enum.reject(names, fn name -> name == removed_name end)}
-  end
-
-  def handle_info(_, names) do
-    {:noreply, names}
+  ## Private functions
+  defp all_usernames(state) do
+    Map.values(state)
   end
 
   defp get_random_username(existing_usernames) do
