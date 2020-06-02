@@ -45,24 +45,9 @@ defmodule MassivelyMultiplayerTttWeb.GameLive do
 
   def handle_event("click_cell", %{"cell-num" => cell_num}, socket) do
     cell_num = String.to_integer(cell_num)
-    move_result = make_move(cell_num)
+    _ = make_move(cell_num)
 
-    socket =
-      case move_result do
-        :game_already_over ->
-          # TODO Replace with flash message
-          IO.puts("game already over")
-          socket
-
-        :square_filled ->
-          # TODO Replace with flash message
-          IO.puts("square filled")
-          socket
-
-        _ ->
-          socket
-      end
-
+    # TODO - display some sort of notification if move_result is "square filled" or "game already over"
     {:noreply, socket}
   end
 
@@ -74,7 +59,6 @@ defmodule MassivelyMultiplayerTttWeb.GameLive do
 
     case new_name do
       "" ->
-        # TODO Flash error message
         {:noreply, socket}
 
       _ ->
@@ -93,7 +77,6 @@ defmodule MassivelyMultiplayerTttWeb.GameLive do
   end
 
   def handle_info({:game_updated, game}, socket) do
-    # TODO Flash message if game has ended
     socket = assign(socket, game: game, status_message: get_status_message(game))
     {:noreply, socket}
   end
