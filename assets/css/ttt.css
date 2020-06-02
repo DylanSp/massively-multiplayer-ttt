@@ -75,4 +75,12 @@ input[type="text"] {
 .user-list-container {
   grid-row: 1 / 4;
   grid-column: 3 / 4;
+  display: flex;
+  flex-flow: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.user-list {
+  padding-inline-start: 0px;
 }
