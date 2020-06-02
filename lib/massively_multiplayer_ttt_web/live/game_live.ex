@@ -20,7 +20,7 @@ defmodule MassivelyMultiplayerTttWeb.GameLive do
       subscribe_to_names()
       username = get_new_username()
       game = get_game_status()
-      all_names = get_all_usernames()
+      all_names = get_all_usernames() |> sort_usernames
 
       socket =
         assign(socket,
@@ -105,7 +105,8 @@ defmodule MassivelyMultiplayerTttWeb.GameLive do
     if new_name == socket.assigns.username do
       {:noreply, socket}
     else
-      socket = assign(socket, all_names: [new_name | socket.assigns.all_names])
+      all_names = [new_name | socket.assigns.all_names] |> sort_usernames
+      socket = assign(socket, all_names: all_names)
       {:noreply, socket}
     end
   end
@@ -113,8 +114,12 @@ defmodule MassivelyMultiplayerTttWeb.GameLive do
   def handle_info({:name_changed, old_name, new_name}, socket) do
     position = Enum.find_index(socket.assigns.all_names, fn name -> name == old_name end)
 
-    socket =
-      assign(socket, all_names: List.replace_at(socket.assigns.all_names, position, new_name))
+    all_names =
+      socket.assigns.all_names
+      |> List.replace_at(position, new_name)
+      |> sort_usernames
+
+    socket = assign(socket, all_names: all_names)
 
     {:noreply, socket}
   end
@@ -134,5 +139,9 @@ defmodule MassivelyMultiplayerTttWeb.GameLive do
       {_, :player_x} -> "Player X to move"
       {_, :player_o} -> "Player O to move"
     end
+  end
+
+  defp sort_usernames(names) do
+    Enum.sort_by(names, &String.capitalize/1)
   end
 end
