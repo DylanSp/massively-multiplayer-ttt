@@ -5,15 +5,12 @@ defmodule MassivelyMultiplayerTtt.GameLiveMonitor do
   use GenServer
   import MassivelyMultiplayerTtt.Messaging
 
-  @process_name :game_live_monitor
-
   def start_link(_opts) do
-    GenServer.start_link(__MODULE__, :ok, name: :game_live_monitor)
+    GenServer.start_link(__MODULE__, :ok, name: __MODULE__)
   end
 
   def monitor(socket_id, game_pid) do
-    pid = GenServer.whereis(@process_name)
-    GenServer.call(pid, {:monitor, {socket_id, game_pid}})
+    GenServer.call(__MODULE__, {:monitor, {socket_id, game_pid}})
   end
 
   def init(_) do

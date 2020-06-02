@@ -3,27 +3,22 @@ defmodule MassivelyMultiplayerTtt.GameServer do
   import MassivelyMultiplayerTtt.Messaging
   alias MassivelyMultiplayerTtt.Game, as: Game
 
-  @process_name :game_server
-
   ## Client API
 
   def start_link(_opts) do
-    GenServer.start_link(__MODULE__, :ok, name: @process_name)
+    GenServer.start_link(__MODULE__, :ok, name: __MODULE__)
   end
 
   def start_new_game() do
-    pid = GenServer.whereis(@process_name)
-    GenServer.call(pid, :start_new_game)
+    GenServer.call(__MODULE__, :start_new_game)
   end
 
   def get_game_status() do
-    pid = GenServer.whereis(@process_name)
-    GenServer.call(pid, :get_game_status)
+    GenServer.call(__MODULE__, :get_game_status)
   end
 
   def make_move(cell_num) do
-    pid = GenServer.whereis(@process_name)
-    GenServer.call(pid, {:make_move, cell_num})
+    GenServer.call(__MODULE__, {:make_move, cell_num})
   end
 
   ## Server callbacks

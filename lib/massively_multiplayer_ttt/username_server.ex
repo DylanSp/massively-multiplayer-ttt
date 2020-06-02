@@ -2,32 +2,26 @@ defmodule MassivelyMultiplayerTtt.UsernameServer do
   use GenServer
   import MassivelyMultiplayerTtt.Messaging
 
-  @process_name :username_server
-
   ## Client API
 
   def start_link(_opts) do
-    GenServer.start_link(__MODULE__, :ok, name: @process_name)
+    GenServer.start_link(__MODULE__, :ok, name: __MODULE__)
   end
 
   def get_new_username() do
-    pid = GenServer.whereis(@process_name)
-    GenServer.call(pid, :get_new_username)
+    GenServer.call(__MODULE__, :get_new_username)
   end
 
   def get_all_usernames() do
-    pid = GenServer.whereis(@process_name)
-    GenServer.call(pid, :get_all_usernames)
+    GenServer.call(__MODULE__, :get_all_usernames)
   end
 
   def change_username(old_name, new_name) do
-    pid = GenServer.whereis(@process_name)
-    GenServer.call(pid, {:change_username, old_name, new_name})
+    GenServer.call(__MODULE__, {:change_username, old_name, new_name})
   end
 
   def remove_username(removed_name) do
-    pid = GenServer.whereis(@process_name)
-    GenServer.call(pid, {:remove_username, removed_name})
+    GenServer.call(__MODULE__, {:remove_username, removed_name})
   end
 
   ## Server callbacks
