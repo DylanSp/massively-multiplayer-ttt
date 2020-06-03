@@ -10,8 +10,8 @@ I initialized this project with `mix phx.new massively_multiplayer_ttt --live --
 
 - `Endpoint`, which spawns the `GameLive` processes that serve the UI and handle input.
 - `Telemetry` and `PubSub`, provided out of the box by Phoenix.
-- `GameServer`, which maintains the tic-tac-toe game state. `GameLive` processes call it to submit moves or game resets; `GameServer` then broadcasts over pubsub to update the game state for all clients.
-- `UsernameServer`, which maintains a map of `GameLive` view process IDs to usernames, holding the list of all currently connected users, broadcasting username additions/changes/removals over pubsub.
+- [`GameServer`](lib/massively_multiplayer_ttt/game_server.ex), which maintains the tic-tac-toe game state. `GameLive` processes call it to submit moves or game resets; `GameServer` then broadcasts over pubsub to update the game state for all clients.
+- [`UsernameServer`](lib/massively_multiplayer_ttt/username_server.ex), which maintains a map of `GameLive` view process IDs to usernames, holding the list of all currently connected users, broadcasting username additions/changes/removals over pubsub.
 
 The [`Game`](lib/massively_multiplayer_ttt/game.ex) module encapsulates all tic-tac-toe game logic. The [Live EEx template](lib/massively_multiplayer_ttt_web/live/game_live.html.leex) describes the UI (with a [bit of CSS](assets/css/ttt.css)), while [`GameLive`](lib/massively_multiplayer_ttt_web/live/game_live.ex) handles input and responds to messages coming from the pubsub system.
 
