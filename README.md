@@ -37,3 +37,7 @@ There are several improvements/opportunities I deliberately haven't pursued with
 - Persisting data beyond the server; I didn't want to bother with database access for this. Admittedly, this has made managing usernames more difficult, especially persisting them across browser refreshes.
 - A mobile-friendly UI; I did the minimum necessary to create a usable UI for desktops.
 - Notifications for erroneous moves; Phoenix's built-in [flash messages](https://hexdocs.pm/phoenix/controllers.html#flash-messages) only work on redirects; they don't work especially well with LiveView. I didn't want to spend the time necessary to integrate a JS library for notifications.
+
+## Inspirations and Education
+
+I've been eyeing Erlang/Elixir for a long while, interested by its performance, reliability, and unique approach to structuring and maintaining applications. I then watched Chris McCord's video, [Build a real-time Twitter clone in 15 minutes with LiveView and Phoenix 1.5](https://www.youtube.com/watch?v=MZvmYaFkNJI), which really piqued my interest and inspired me to start this project. I've also worked through some of The Pragmatic Studio's [Phoenix LiveView course](https://pragmaticstudio.com/phoenix-liveview) to help build my understanding.
