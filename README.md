@@ -4,6 +4,11 @@
 
 This project is a tic-tac-toe game able to be played simultaneously by any number of connected players, all updating in real-time. It's a way for me to learn a bit about the Elixir/Phoenix/LiveView stack and the BEAM, as an alternative to SPA frontends and stateless application servers.
 
+## Caveats
+
+- While you can enter a username through the form on the left (which will show up in the user list for all users), this will be lost on refresh.
+- A single game state is shared between all users.
+
 ## Overall Architecture
 
 I initialized this project with `mix phx.new massively_multiplayer_ttt --live --no-ecto` to create a Phoenix LiveView app without a database backend. From there, as can be seen in my [`Application` module](lib/massively_multiplayer_ttt/application.ex), I have the following processes running under the root supervisor:
@@ -37,6 +42,7 @@ There are several improvements/opportunities I deliberately haven't pursued with
 - Persisting data beyond the server; I didn't want to bother with database access for this. Admittedly, this has made managing usernames more difficult, especially persisting them across browser refreshes.
 - A mobile-friendly UI; I did the minimum necessary to create a usable UI for desktops.
 - Notifications for erroneous moves; Phoenix's built-in [flash messages](https://hexdocs.pm/phoenix/controllers.html#flash-messages) only work on redirects; they don't work especially well with LiveView. I didn't want to spend the time necessary to integrate a JS library for notifications.
+- Preserving session state (i.e. usernames) through refreshes. This is tricky without a database backend; I tried saving a session key client-side, getting it with [JS hooks](https://hexdocs.pm/phoenix_live_view/Phoenix.LiveView.html#module-js-interop-and-client-controlled-dom), and using that to manage state in the `UsernameServer`. However, I couldn't get everything synchronizing correctly.
 
 ## Inspirations and Education
 
