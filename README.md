@@ -1,6 +1,6 @@
 # MassivelyMultiplayerTtt
 
-[Play this app on Gigalixir!](https://massively-multiplayer-tic-tac-toe.gigalixirapp.com/)
+[Play this app on Fly.io!](https://small-lake-1570.fly.dev/)
 
 This project is a tic-tac-toe game able to be played simultaneously by any number of connected players, all updating in real-time. It's a way for me to learn a bit about the Elixir/Phoenix/LiveView stack and the BEAM, as an alternative to SPA frontends and stateless application servers.
 
